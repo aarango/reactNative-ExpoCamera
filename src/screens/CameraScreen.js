@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import {BarCodeScanner, BarCodeScannerResult} from 'expo-barcode-scanner';
-
-// let number = 0
-// const finderWidth = 280;
-// const finderHeight =  230;
-// const width = Dimensions.get('window').width;
-// const height = Dimensions.get('window').height;
-// const viewMinX = (width - finderWidth) / 2;
-// const viewMinY = (height - finderHeight) / 2;
+import barCode from '../services/sendBarCode'
 
 export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  // const [type, setType] = useState>(BarCodeScanner.Constants.Type.back);
 
   useEffect(() => {
     (async () => {
@@ -22,11 +14,11 @@ export default function CameraScreen() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     console.log('data', data)
-
-    alert(`Code ${data} has been scanned!`);
+    await barCode(data)
+    // alert(`Code ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {
@@ -37,24 +29,6 @@ export default function CameraScreen() {
   }
 
   return (
-    //   <View style={styles.flex1}>
-    //    <BarCodeScanner
-    //     style={styles.cameraScreen}
-    //     defaultOnFocusComponent
-    //     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-    //    > 
-    //     <View style={styles.guide} />
-    //     <View style={styles.cameraButtonContainer}>
-    //       {scanned &&
-    //       <TouchableOpacity onPress={() => setScanned(false)}>
-    //         <View style={styles.cameraButton}>
-    //           <Text style={styles.icon}>📷</Text>
-    //         </View>
-    //       </TouchableOpacity>
-    //       }
-    //     </View>
-    //   </BarCodeScanner>
-    // </View>
       <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
